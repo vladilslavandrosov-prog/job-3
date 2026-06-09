@@ -28,7 +28,7 @@ export default function RegisterPage() {
       password: form.password,
       options: {
         data: { company_name: form.company_name, phone: form.phone },
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
+        emailRedirectTo: `${location.origin}/api/auth/callback?next=/onboarding`,
       },
     });
     setLoading(false);
@@ -36,7 +36,7 @@ export default function RegisterPage() {
       toast.error(error.message);
     } else {
       toast.success('Проверьте почту для подтверждения регистрации');
-      router.push('/login');
+      router.push(`/login?message=${encodeURIComponent('Письмо отправлено — подтвердите email и войдите')}`);
     }
   }
 
