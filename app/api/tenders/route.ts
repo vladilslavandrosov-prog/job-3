@@ -56,14 +56,29 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const search = searchParams.get('search');
+  const platform = searchParams.get('platform');
+  const decision = searchParams.get('decision');
+  const minAmount = searchParams.get('min_amount') ? Number(searchParams.get('min_amount')) : null;
+  const maxAmount = searchParams.get('max_amount') ? Number(searchParams.get('max_amount')) : null;
 
   let tenders = MOCK_TENDERS;
   if (search) {
+    const q = search.toLowerCase();
     tenders = tenders.filter(t =>
-      t.title.toLowerCase().includes(search.toLowerCase()) ||
-      t.zakazchik.toLowerCase().includes(search.toLowerCase())
+      t.title.toLowerCase().includes(q) || t.zakazchik.toLowerCase().includes(q)
     );
   }
+  if (platform) {
+    const platforms = platform.split(',');
+    tenders = tenders.filter(t => platforms.includes(t.platform));
+  }
+  if (decision === 'none') {
+    tenders = tenders.filter(t => !t.decision);
+  } else if (decision) {
+    tenders = tenders.filter(t => t.decision === decision);
+  }
+  if (minAmount !== null) tenders = tenders.filter(t => t.amount >= minAmount);
+  if (maxAmount !== null) tenders = tenders.filter(t => t.amount <= maxAmount);
 
   // Try real Flask backend
   if (process.env.FLASK_BACKEND_URL) {
