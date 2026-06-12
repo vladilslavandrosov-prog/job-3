@@ -28,7 +28,7 @@ export default function RegisterPage() {
       password: form.password,
       options: {
         data: { company_name: form.company_name, phone: form.phone },
-        emailRedirectTo: `${location.origin}/api/auth/callback?next=/onboarding`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/onboarding`,
       },
     });
     setLoading(false);
