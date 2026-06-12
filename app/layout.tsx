@@ -17,7 +17,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://tenderintel.ru'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL?.startsWith('http')
+      ? process.env.NEXT_PUBLIC_APP_URL
+      : `https://${process.env.NEXT_PUBLIC_APP_URL ?? 'tenderintel.ru'}`
+  ),
   title: {
     default: 'TenderIntel — AI-агрегатор ИТ-тендеров',
     template: '%s | TenderIntel',
