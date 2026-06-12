@@ -6,6 +6,12 @@ meta:
 
 build:
   additionalCommands: npm run build
+  artifacts:
+    - .next
+    - public
+    - node_modules
+    - package.json
+    - next.config.ts
 
 run:
   scriptName: node_modules/.bin/next
