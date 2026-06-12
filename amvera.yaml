@@ -5,16 +5,15 @@ meta:
     version: "20"
 
 build:
-  additionalCommands: npm run build
+  additionalCommands: |
+    npm run build
+    cp -r public .next/standalone/public
+    cp -r .next/static .next/standalone/.next/static
   artifacts:
-    - .next
-    - public
-    - node_modules
-    - package.json
-    - next.config.ts
+    - .next/standalone
 
 run:
-  scriptName: node_modules/.bin/next
-  args: start
+  scriptName: node
+  args: .next/standalone/server.js
   containerPort: 3000
   persistenceMount: /data
