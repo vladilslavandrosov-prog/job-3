@@ -6,8 +6,6 @@ meta:
 
 build:
   additionalCommands: npm run build
-  artifacts:
-    "*": /
 
 run:
   scriptName: node_modules/.bin/next
