@@ -3,7 +3,7 @@ import { updateSession } from '@/lib/supabase/middleware';
 
 const PUBLIC_PATHS = ['/', '/login', '/register', '/reset-password', '/pricing', '/api/billing/webhook', '/api/health'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { supabaseResponse, user, supabase } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
