@@ -23,14 +23,18 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin}/api/auth/callback?next=/onboarding`;
+    console.log('[register] supabaseUrl:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('[register] redirectTo:', redirectTo);
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
         data: { company_name: form.company_name, phone: form.phone },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin}/api/auth/callback?next=/onboarding`,
+        emailRedirectTo: redirectTo,
       },
     });
+    console.log('[register] result:', { data, error });
     setLoading(false);
     if (error) {
       toast.error(error.message);
