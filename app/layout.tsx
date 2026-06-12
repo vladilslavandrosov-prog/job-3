@@ -1,11 +1,19 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from 'sonner';
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
-const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
+const geistSans = localFont({
+  src: '../public/fonts/geist-latin.woff2',
+  variable: '--font-geist-sans',
+  display: 'swap',
+});
+const geistMono = localFont({
+  src: '../public/fonts/geist-mono-latin.woff2',
+  variable: '--font-geist-mono',
+  display: 'swap',
+});
 
 export const viewport: Viewport = {
   themeColor: [
