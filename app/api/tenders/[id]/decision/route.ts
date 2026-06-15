@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { getOrCreateTenant } from '@/lib/tenant';
 import { z } from 'zod';
 
 const schema = z.object({ decision: z.enum(['interesting', 'rejected', 'deferred']) });
@@ -14,13 +15,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: 'Invalid decision' }, { status: 400 });
 
-  const { data: tenantUser } = await supabase.from('tenant_users').select('tenant_id').eq('user_id', user.id).single();
-  if (!tenantUser) return NextResponse.json({ error: 'Tenant not found' }, { status: 404 });
+  const tenantId = await getOrCreateTenant(supabase, user.id).catch(() => null);
+  if (!tenantId) return NextResponse.json({ error: 'Tenant error' }, { status: 500 });
 
   const { error } = await supabase
     .from('saved_tenders')
     .upsert({
-      tenant_id: tenantUser.tenant_id,
+      tenant_id: tenantId,
       user_id: user.id,
       tender_id: id,
       decision: parsed.data.decision,
