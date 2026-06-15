@@ -22,14 +22,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
-  const { data: tenantUser } = await supabase
-    .from('tenant_users')
-    .select('tenant_id')
-    .eq('user_id', user.id)
-    .single();
-
-  if (!tenantUser) return NextResponse.json({ error: 'Tenant not found' }, { status: 404 });
-
   // Save or update telegram_users filters (if connected)
   await supabase
     .from('telegram_users')
