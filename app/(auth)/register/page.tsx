@@ -34,10 +34,12 @@ export default function RegisterPage() {
         emailRedirectTo: redirectTo,
       },
     });
-    console.log('[register] result:', { data, error });
     setLoading(false);
     if (error) {
       toast.error(error.message);
+    } else if (data.user && data.user.identities?.length === 0) {
+      toast.error('Этот email уже зарегистрирован. Войдите или восстановите пароль.');
+      router.push('/login');
     } else {
       toast.success('Проверьте почту для подтверждения регистрации');
       router.push(`/login?message=${encodeURIComponent('Письмо отправлено — подтвердите email и войдите')}`);
