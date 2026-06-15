@@ -5,12 +5,12 @@ meta:
     version: "20"
 
 build:
-  additionalCommands: npm run build
+  additionalCommands: npm run build && pip install -q -r bot/requirements.txt
   artifacts:
     "*": /
 
 run:
-  scriptName: node_modules/.bin/next
-  scriptArguments: start
+  scriptName: sh
+  scriptArguments: start.sh
   containerPort: 3000
   persistenceMount: /data
