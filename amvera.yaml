@@ -11,6 +11,6 @@ build:
 
 run:
   scriptName: node_modules/.bin/next
-  args: start
+  scriptArguments: start
   containerPort: 3000
   persistenceMount: /data
