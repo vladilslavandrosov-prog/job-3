@@ -5,7 +5,7 @@ meta:
     version: "20"
 
 build:
-  additionalCommands: npm run build && pip install -q -r bot/requirements.txt
+  additionalCommands: npm run build
   artifacts:
     "*": /
 
