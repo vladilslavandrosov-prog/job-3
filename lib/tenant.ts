@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { createServiceClient } from '@/lib/supabase/server';
 
 export async function getOrCreateTenant(supabase: SupabaseClient, userId: string): Promise<string> {
   const { data: tenantUser } = await supabase
@@ -9,8 +10,10 @@ export async function getOrCreateTenant(supabase: SupabaseClient, userId: string
 
   if (tenantUser) return tenantUser.tenant_id;
 
-  // No tenant yet — create one
-  const { data: tenant, error } = await supabase
+  // No tenant yet — use service role to bypass RLS
+  const service = await createServiceClient();
+
+  const { data: tenant, error } = await service
     .from('tenants')
     .insert({ name: 'Моя компания', plan: 'starter' })
     .select('id')
@@ -18,7 +21,7 @@ export async function getOrCreateTenant(supabase: SupabaseClient, userId: string
 
   if (error || !tenant) throw new Error('Failed to create tenant: ' + error?.message);
 
-  await supabase
+  await service
     .from('tenant_users')
     .insert({ tenant_id: tenant.id, user_id: userId, role: 'owner' });
 
