@@ -15,8 +15,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: 'Invalid decision' }, { status: 400 });
 
-  const tenantId = await getOrCreateTenant(supabase, user.id).catch(() => null);
-  if (!tenantId) return NextResponse.json({ error: 'Tenant error' }, { status: 500 });
+  let tenantId: string | null = null;
+  try {
+    tenantId = await getOrCreateTenant(supabase, user.id);
+  } catch (e) {
+    console.error('[decision] getOrCreateTenant error:', e);
+    return NextResponse.json({ error: 'Tenant error: ' + String(e) }, { status: 500 });
+  }
 
   const { error } = await supabase
     .from('saved_tenders')
