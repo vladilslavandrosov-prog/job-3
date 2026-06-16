@@ -7,8 +7,10 @@ const schema = z.object({ decision: z.enum(['interesting', 'rejected', 'deferred
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  console.log('[decision] PATCH start, id:', id);
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  console.log('[decision] user:', user?.id ?? null, 'userError:', userError?.message ?? null);
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
@@ -32,7 +34,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       decision: parsed.data.decision,
     }, { onConflict: 'tenant_id,tender_id' });
 
+  console.log('[decision] upsert error:', error?.message ?? null);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  console.log('[decision] done');
   return NextResponse.json({ ok: true });
 }
