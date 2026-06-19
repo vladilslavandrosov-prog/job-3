@@ -1,21 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
-import { createHmac } from 'crypto';
 
 const PERIOD_MONTHS: Record<string, number> = { monthly: 1, yearly: 12 };
 
 export async function POST(request: Request) {
   const rawBody = await request.text();
-
-  // Verify ЮKassa webhook signature
-  const webhookSecret = process.env.YUKASSA_WEBHOOK_SECRET;
-  if (webhookSecret) {
-    const signature = request.headers.get('x-yukassa-signature') ?? '';
-    const expected = createHmac('sha256', webhookSecret).update(rawBody).digest('hex');
-    if (signature !== expected) {
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-    }
-  }
 
   let body: Record<string, unknown>;
   try {
