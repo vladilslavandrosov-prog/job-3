@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Brain, LayoutDashboard, Bookmark, Settings, LogOut, Users, Shield } from 'lucide-react';
+import { Brain, LayoutDashboard, Bookmark, Settings, LogOut, Users, Shield, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './ThemeToggle';
 import { createClient } from '@/lib/supabase/client';
@@ -11,10 +11,22 @@ import { toast } from 'sonner';
 const NAV = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Тендеры' },
   { href: '/dashboard/saved', icon: Bookmark, label: 'Сохранённые' },
+  { href: '/dashboard/settings/subscription', icon: CreditCard, label: 'Тариф' },
   { href: '/dashboard/settings', icon: Settings, label: 'Настройки' },
 ];
 
-const BOTTOM_NAV = NAV;
+const BOTTOM_NAV = [
+  { href: '/dashboard', icon: LayoutDashboard, label: 'Тендеры' },
+  { href: '/dashboard/saved', icon: Bookmark, label: 'Сохранённые' },
+  { href: '/dashboard/settings', icon: Settings, label: 'Настройки' },
+];
+
+function isActive(pathname: string, href: string, nav: { href: string }[]) {
+  const match = nav
+    .filter(n => pathname === n.href || (n.href !== '/dashboard' && pathname.startsWith(n.href)))
+    .sort((a, b) => b.href.length - a.href.length)[0];
+  return match?.href === href;
+}
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -44,7 +56,7 @@ export function Sidebar() {
               href={href}
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+                isActive(pathname, href, NAV)
                   ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
                   : 'text-[var(--text-muted)] hover:bg-[var(--border)] hover:text-[var(--text)]'
               )}
@@ -76,7 +88,7 @@ export function Sidebar() {
               href={href}
               className={cn(
                 'flex flex-col items-center gap-1 px-4 py-2 text-xs transition-colors',
-                pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+                isActive(pathname, href, BOTTOM_NAV)
                   ? 'text-[var(--primary)]'
                   : 'text-[var(--text-muted)]'
               )}
