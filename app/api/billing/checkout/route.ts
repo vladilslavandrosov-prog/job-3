@@ -43,6 +43,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       amount: { value: (amount / 100).toFixed(2), currency: 'RUB' },
+      capture: true,
       confirmation: {
         type: 'redirect',
         return_url: `${appUrl}/dashboard/settings/subscription?success=true`,
