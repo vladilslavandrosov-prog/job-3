@@ -50,10 +50,10 @@
 
 ### 2.3. URL Configuration (обязательно после каждого изменения домена)
 Supabase → **Authentication → URL Configuration**:
-- **Site URL**: `https://ТВОЙ_ДОМЕН` (без слеша в конце)
+- **Site URL**: `https://ТВОИ_ДОМЕН` (без слеша в конце)
 - **Redirect URLs** — добавь оба:
   ```
-  https://ТВОЙ_ДОМЕН/api/auth/callback
+  https://ТВОИ_ДОМЕН/api/auth/callback
   http://localhost:3000/api/auth/callback
   ```
 
@@ -63,7 +63,7 @@ Supabase → **Authentication → URL Configuration**:
 Supabase → **Authentication → Providers → Google**:
 1. Включи провайдер
 2. В [Google Cloud Console](https://console.cloud.google.com) создай OAuth 2.0 Client ID (тип Web application)
-   - Authorized redirect URI: `https://ТВОЙ_ПРОЕКТ.supabase.co/auth/v1/callback`
+   - Authorized redirect URI: `https://ТВОИ_ПРОЕКТ.supabase.co/auth/v1/callback`
 3. Скопируй Client ID и Client Secret в настройки провайдера в Supabase
 
 ### 2.5. Ключи для переменных окружения
@@ -83,7 +83,7 @@ Supabase → **Settings → API**:
 
 ### 3.2. HTTP-уведомления (вебхук)
 **Интеграция → HTTP-уведомления → Изменить настройки**:
-- URL для уведомлений: `https://ТВОЙ_ДОМЕН/api/billing/webhook`
+- URL для уведомлений: `https://ТВОИ_ДОМЕН/api/billing/webhook`
   - ⚠️ Частая ошибка — указать `/pricing` или другой URL вместо `/api/billing/webhook`. Без правильного URL оплата проходит, но статус тарифа в приложении не обновляется
 - Включи события: `payment.succeeded`, `payment.waiting_for_capture`, `payment.canceled`, `refund.succeeded`
 
@@ -135,4 +135,4 @@ Supabase → **Settings → API**:
 
 ## 7. Известные особенности / на что не наступать повторно
 
-См. таблицу «Что было исправлено в коде» в `DEBUGGING_GUIDE.md` — там подробный разбор каждого найденного и исправленного бага (RLS-рекурсия, `capture: true` для ЮKassa, неверная проверка подписи вебхука, `location.origin` при SSR и т.д.). Весь код уже содержит эти фиксы — описанные там действия нужны только на стороне внешних сервисов (Supabase, ЮKassa), которые не версионируются вместе с кодом.
+См. таблицу «Что было исправлено в коде» в `DEBUGGING_GUIDE.md` — там подробный разбор каждого найденного и исправленного бага (RLS-рекурсия, `capture: true` для ЮKassa, неверная проверка подписи вебхука, `location.origin` при SSR и т.д.). Весь код уже содержит эти фиксы, описанные там действия нужны только на стороне внешних сервисов (Supabase, ЮKassa), которые не версионируются вместе с кодом.
